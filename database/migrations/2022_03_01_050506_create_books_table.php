@@ -18,7 +18,7 @@ class CreateBooksTable extends Migration
             $table->string('book_name');
             $table->unsignedInteger('category_id');
             $table->decimal('price');
-            $table->string('author')->nullable();
+            $table->string('author');
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });

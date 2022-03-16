@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,10 +19,16 @@ Route::get('/', function () {
 });
 
 Route::resource('index',CategoryController::class);
-Route::post('saveBook',[CategoryController::class,'saveBook']); 
-Route::get('edit/{id}',[CategoryController::class,'edit2']);
-Route::delete('delete/{id}',[CategoryController::class,'delete']);
 
+Route::post('saveBook',[CategoryController::class,'saveBook']); 
+
+Route::get('indexBook','App\Http\Controllers\BookController@index'); 
+
+Route::get('edit/{id}',[CategoryController::class,'edit2']);
+
+Route::get('destroy/{id}',[CategoryController::class,'destroy']);
+
+Route::delete('delete/{id}',[CategoryController::class,'delete']);
 
 
 

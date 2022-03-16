@@ -14,8 +14,10 @@ class Category extends Model
         'category_name'
     ];
 
+    protected $table="categories";
+
     public function book(){
-        return $this->hasMany(BookCategory::class);
+        return $this->hasMany(Book::class);
     }
    
     

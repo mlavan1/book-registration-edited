@@ -20,7 +20,6 @@ class CategoryController extends Controller
     {
         $category = Category::latest()->get();
         $book=Book::latest()->get();
-        $booksss = BookCategory::latest()->get();
         
         if ($request->ajax()) {
             $data = Category::latest()->get();
@@ -38,7 +37,9 @@ class CategoryController extends Controller
                     ->make(true);
         }
      
-        return view('index',compact('category','booksss','book'));   
+        return view('index',compact('category','book'));   
+        // return Book::find(3)->category->category_name;
+        
     }
 
     /**
@@ -85,12 +86,14 @@ class CategoryController extends Controller
 
     public function saveBook(Request $request)
     {
+        // dd($request);
         $book= new Book;
         $book-> book_name   =   $request    ->input('bookName');
         $book-> price       =   $request    ->input('Price');
         $book-> author      =   $request    ->input('Author');
+        $book-> category_id      =   $request    ->input('categorySelector');
         $book-> save();
-        $book-> category()->attach($request ->  input('categorySelector'));
+        // $book-> category()->attach($request ->  input('categorySelector'));
         
         return response()->json(['success'=>'Book saved successfully.']);
     }
@@ -141,10 +144,12 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
+        // Category::find($id)->delete();
+        // Book::find($id)->delete();
         Category::find($id)->delete();
-        Book::find($id)->delete();
-        
      
-        return response()->json(['success'=>'Book deleted successfully.']);
+        // return response()->json(['success'=>'Book deleted successfully.']);
+        
     }
 }
+

@@ -16,9 +16,10 @@ class Book extends Model
         'author'
     ];
 
+    protected $table="books";
 
     public function category(){
-        return $this->belongsToMany(Category::class,'book_categories');
+        return $this->belongsTo(Category::class,'category_id','id');
     }
     
 }

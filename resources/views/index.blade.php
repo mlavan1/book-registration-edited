@@ -128,25 +128,12 @@
                 <th>Book Name</th> 
                 <th>Price</th>
                 <th>Author</th>
-                <th>Category</th>
+                <th>Category Name</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-         @foreach ($booksss as $book )
-             <tr>
-                 <td>{{ $book->book->id }}</td>
-                 <td>{{ $book->book->book_name }}</td>
-                 <td>{{ $book->book->price }}</td>
-                 <td>{{ $book->book->author }}</td>
-                 <td>{{ $book->category->category_name }}</td>
-                 <td>
-                    <a href="javascript:void(0)" data-toggle="tooltip"  data-id="{{ $book->book->id }}" href="{{ url('edit/{$book->book->id}') }}" data-original-title="Edit" class="edit btn btn-primary btn-sm editBook2">Edit</a>
-                    <a href="javascript:void(0)" data-toggle="tooltip"  data-id="{{ $book->book->id }}" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook2">Delete</a>
-                </td>
-                 
-             </tr>
-         @endforeach
+        
         </tbody>
     </table><br><br><br>
 </div>
@@ -198,15 +185,30 @@
             ],
         });
 
+        var table2 = $('#table2').DataTable({
+            
+            processing: true,
+            serverSide: true,
+            ajax: "{{ url('indexBook') }}",
+            columns: [
+                {data: 'id', name: 'id'},
+                {data: 'book_name', name: 'book_name'},
+                {data: 'author', name: 'author'},
+                {data: 'price', name: 'price'},
+                {data:'category_name', name:'category_name'}
+                // {data: 'action', name: 'action', orderable: false, searchable: false},
+            ],
+        });
+
 
         // Click New Category Button Model Popup
 
 
         $('#createNewBook').click(function () {
-            // $('#saveBtn').val("create-book");
-            // $('#category_id').val('');
-            // $('#bookForm').trigger("reset");
-            // $('#modelHeading').html("Create New Category");
+            $('#saveBtn').val("create-book");
+            $('#category_id').val('');
+            $('#bookForm').trigger("reset");
+            $('#modelHeading').html("Create New Category");
             $('#ajaxModel').modal('show');
         });
 
@@ -249,9 +251,7 @@
 
         $('#saveBtn2').click(function (e) {
             e.preventDefault();
-            $(this).html('Saved');
-            $('notification').html('Data Saved Successfully !');
-        
+            $(this).html('Saved');        
             $.ajax({
                 data: $('#bookForm2').serialize(),
                 url: "{{url('saveBook') }}",
@@ -266,7 +266,7 @@
                 },
                 error: function (data) {
                     console.log('Error:', data);
-                    $('#saveBtn2').html('Error Bro !');
+                    $('#saveBtn2').html('Something Went Wrong !');
                 }
             });
         });
@@ -305,15 +305,17 @@
         // Delete Button
 
 
-        $('body').on('click', '.deleteBook', function () {
+         $('body').on('click', '.deleteBook', function () {
      
-            var category_id = $(this).data("id");
+            var category_id = $(this).data('id');
+           
             confirm("Are You sure want to delete ?");
         
             $.ajax({
-                type: "DELETE",
-                url: "{{ route('index.store') }}"+'/'+category_id,
+                // type: "DELETE",
+                url:"{{url('destroy') }}"+"/"+category_id,
                 success: function (data) {
+                    // $('#table').DataTable().ajax.reload(); //To reload DataTable
                     table.draw();
                 },
                 error: function (data) {
